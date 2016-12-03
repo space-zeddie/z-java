@@ -3,6 +3,7 @@ package com.zakharuk.java;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.xml.bind.annotation.XmlID;
 
 /**
  * Created by citizenzer0 on 12/2/16.
@@ -11,6 +12,7 @@ import javax.validation.constraints.Null;
 @Table(name = "subjects")
 public class Subject {
 
+    //@XmlID
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -20,6 +22,7 @@ public class Subject {
 
     @NotNull
     private double credits;
+
 
     private String prof;
 
