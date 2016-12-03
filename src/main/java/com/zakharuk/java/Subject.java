@@ -3,16 +3,21 @@ package com.zakharuk.java;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by citizenzer0 on 12/2/16.
  */
+@XmlRootElement(name = "subject")
+@XmlType(propOrder = {"id", "name", "credits", "prof", "annotation"})
 @Entity
 @Table(name = "subjects")
 public class Subject {
 
-    //@XmlID
+    @XmlID
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -23,9 +28,10 @@ public class Subject {
     @NotNull
     private double credits;
 
-
+    @XmlAttribute
     private String prof;
 
+    @XmlAttribute
     private String annotation;
 
     public Subject () {}
