@@ -133,6 +133,8 @@ public class SubjectController {
             for (User u : s.getStudents()) {
                 res.append(u.toString());
                 res.append("<br>");
+                res.append(removeStudentBtn(s.getId(), u.getId()));
+                res.append("<br>");
             }
         }
         catch (Exception ex) {
@@ -218,6 +220,11 @@ public class SubjectController {
     private String addStudentBtn(long id, long studentId) {
 
         return "<a href=\"/add-user?subjectid=" + id + "&userid=" + studentId + "\" class=\"btn btn-info\">Add "
+                + userDao.findOne(studentId).getName() + "</a>";
+    }
+    private String removeStudentBtn(long id, long studentId) {
+
+        return "<a href=\"/remove-user?subjectid=" + id + "&userid=" + studentId + "\" class=\"btn btn-info\">Remove "
                 + userDao.findOne(studentId).getName() + "</a>";
     }
 
