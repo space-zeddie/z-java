@@ -7,16 +7,26 @@
     <link href="css/bootstrap.min.css"
           th:href="@{css/bootstrap.min.css}"
           rel="stylesheet" media="screen" />
+    <script src="css/js/jq.js"
+            th:src="@{css/js/jq.js}"></script>
     <script src="css/js/bootstrap.js"
             th:src="@{css/js/bootstrap.js}"></script>
+    <script src="css/js/main.js"
+            th:src="@{css/js/main.js}"></script>
     <link href="../static/css/main.css"
           th:href="@{css/main.css}" rel="stylesheet" media="screen"/>
 </head>
 <body>
 <div class="container">
     <div class="jumbotron">
-        <a href="/all" class="btn btn-primary">List all subjects</a>
-        <a href="/all-users" class="btn btn-primary">List all users</a>
+        <div>
+            Name <input type="text" id="name" name="name" th:text="${name}" /><br />
+            Password <input type="text" id="password" name="password" th:text="${password}" /><br />
+            Role <input type="text" id="role" name="role" th:text="${role}"/><br />
+            <button id="adds">Process</button>
+            <a id="link" href="/" class = "btn btn-info">Register</a>
+            <!--<input type="submit" />-->
+        </div>
     </div>
 </div>
 </body>

@@ -27,6 +27,7 @@ public class UserController {
     @RequestMapping("/createuser")
     @ResponseBody
     public String create(String name, String password, String role) {
+        //System.err.println("HERE");
         String userId = "";
         try {
             User user = new User(name, password, role);
