@@ -1,5 +1,6 @@
 package com.zakharuk.java;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -7,6 +8,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.List;
 
 /**
  * Created by citizenzer0 on 12/2/16.
@@ -34,6 +36,9 @@ public class Subject {
     @XmlAttribute
     private String annotation;
 
+    @ManyToMany(mappedBy = "subjects")
+    public List<User> students;
+
     public Subject () {}
 
     public Subject(String name, double credits) {
@@ -46,6 +51,17 @@ public class Subject {
         this.credits = credits;
         this.prof = prof;
         this.annotation = annotation;
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", credits=" + credits +
+                ", prof='" + prof + '\'' +
+                ", annotation='" + annotation + '\'' +
+                '}';
     }
 
     public long getId() {
