@@ -122,4 +122,21 @@ public class SubjectController {
         return "User succesfully added!";
     }
 
+    @RequestMapping("/remove-user")
+    @ResponseBody
+    public String removeSubject(long subjectid, String userName) {
+        try {
+            Subject subject = subjectDao.findOne(subjectid);
+            User user = userDao.findByName(userName);
+            List<User> newlist = subject.getStudents();
+            newlist.remove(user);
+            subject.setStudents(newlist);
+            subjectDao.save(subject);
+        }
+        catch (Exception ex) {
+            return "Error removing the user: " + ex.toString();
+        }
+        return "User succesfully removed!";
+    }
+
 }
