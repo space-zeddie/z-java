@@ -63,13 +63,29 @@ public class Subject {
 
     @Override
     public String toString() {
-        return "Subject{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", credits=" + credits +
-                ", prof='" + prof + '\'' +
-                ", annotation='" + annotation + '\'' +
-                '}';
+        StringBuilder res = new StringBuilder();
+        res.append("<b>");
+        res.append(getName());
+        res.append("</b>");
+        res.append("(" + getId() + ")");
+        res.append("<br>");
+        res.append("Credits: ");
+        res.append(getCredits());
+        res.append("<br>");
+        if (getProf() != null) {
+            res.append("Professor: ");
+            res.append(getProf());
+            res.append("<br>");
+        }
+        if (getAnnotation() != null) {
+            res.append("Annotation: ");
+            res.append(getAnnotation());
+            res.append("<br>");
+        }
+        res.append("Students: ");
+        res.append(getStudents().size());
+        res.append("<br>");
+        return res.toString();
     }
 
     public long getId() {

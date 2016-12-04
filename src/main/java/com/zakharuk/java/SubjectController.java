@@ -31,9 +31,9 @@ public class SubjectController {
             subjectId = String.valueOf(subject.getId());
         }
         catch (Exception ex) {
-            return "Error creating the subject: " + ex.toString();
+            return HEADER +  "Error creating the subject: " + ex.toString() + FOOTER;
         }
-        return "Subject succesfully created with id = " + subjectId;
+        return HEADER + "Subject succesfully created with id = " + subjectId + FOOTER;
     }
 
     /**
@@ -48,9 +48,9 @@ public class SubjectController {
             subjectDao.delete(subject);
         }
         catch (Exception ex) {
-            return "Error deleting the subject:" + ex.toString();
+            return HEADER + "Error deleting the subject:" + ex.toString() + FOOTER;
         }
-        return "Subject succesfully deleted!";
+        return HEADER + "Subject succesfully deleted!" + FOOTER;
     }
 
     /**
@@ -66,9 +66,9 @@ public class SubjectController {
             subjectId = String.valueOf(subject.getId());
         }
         catch (Exception ex) {
-            return "Subject not found";
+            return HEADER + "Subject not found" + FOOTER;
         }
-        return "The subject id is: " + subjectId;
+        return HEADER + "The subject id is: " + subjectId + FOOTER;
     }
 
     /**
@@ -85,25 +85,57 @@ public class SubjectController {
             subjectDao.save(subject);
         }
         catch (Exception ex) {
-            return "Error updating the subject: " + ex.toString();
+            return HEADER + "Error updating the subject: " + ex.toString() + FOOTER;
         }
-        return "Subject succesfully updated!";
+        return HEADER + "Subject succesfully updated!" + FOOTER;
     }
 
     @RequestMapping("/all")
     @ResponseBody
     public String findAll() {
+        StringBuilder res = new StringBuilder();
+        res.append(HEADER);
         try {
             Iterable<Subject> all = subjectDao.findAll();
-            StringBuilder res = new StringBuilder();
-            for (Subject s : all)
-                res.append(s + "\n");
-            return res.toString();
+            for (Subject s : all) {
+                res.append("<div>");
+                res.append(s.toString());
+                res.append("<br>");
+                res.append(listStudentsBtn(s.getId()));
+                res.append("</div>");
+                res.append("<br>");
+            }
         }
         catch (Exception ex) {
-            return "Error retrieving the subjects: " + ex.toString();
+            res.append("Error retrieving the subjects: " + ex.toString());
+        }
+        finally {
+            res.append(FOOTER);
+            return res.toString();
         }
     }
+
+    @RequestMapping("/list-students")
+    @ResponseBody
+    public String listStudents(long id) {
+        StringBuilder res = new StringBuilder();
+        res.append(HEADER);
+        try {
+            Subject s = subjectDao.findOne(id);
+            for (User u : s.getStudents()) {
+                res.append(u.toString());
+                res.append("<br>");
+            }
+        }
+        catch (Exception ex) {
+            res.append("Error retrieving the students: " + ex.toString());
+        }
+        finally {
+            res.append(FOOTER);
+            return res.toString();
+        }
+    }
+
 
     @RequestMapping("/add-user")
     @ResponseBody
@@ -117,9 +149,9 @@ public class SubjectController {
             subjectDao.save(subject);
         }
         catch (Exception ex) {
-            return "Error adding the user: " + ex.toString();
+            return HEADER + "Error adding the user: " + ex.toString() + FOOTER;
         }
-        return "User succesfully added!";
+        return HEADER + "User succesfully added!" + FOOTER;
     }
 
     @RequestMapping("/remove-user")
@@ -138,5 +170,32 @@ public class SubjectController {
         }
         return "User succesfully removed!";
     }
+
+    private String listStudentsBtn(long id) {
+
+        return "<a href=\"/list-students?id=" + id + "\" class=\"btn btn-info\">View Students</a>";
+    }
+
+    private static String HEADER = "<!DOCTYPE html>\n" +
+            "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
+            "<head lang=\"en\">\n" +
+            "\n" +
+            "    <title>Subjects</title>\n" +
+            "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
+            "    <link href=\"css/bootstrap.min.css\"\n" +
+            "          th:href=\"@{css/bootstrap.min.css}\"\n" +
+            "          rel=\"stylesheet\" media=\"screen\" />\n" +
+            "    <script src=\"css/js/bootstrap.js\"\n" +
+            "            th:src=\"@{css/js/bootstrap.js}\"></script>\n" +
+            "    <link href=\"../static/css/main.css\"\n" +
+            "          th:href=\"@{css/main.css}\" rel=\"stylesheet\" media=\"screen\"/>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "<div class=\"container\">";
+
+    private static String FOOTER = "<br><a href=\"/\" class=\"btn btn-info\"><< Back</a>" + "\n" +
+            "</div>\n" +
+            "</body>\n" +
+            "</html>";
 
 }

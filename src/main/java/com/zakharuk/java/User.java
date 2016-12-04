@@ -44,12 +44,19 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
-                '}';
+        StringBuilder res = new StringBuilder();
+        res.append("<i>");
+        res.append(getName());
+        res.append("</i>");
+        res.append("(#" + getId() + ")");
+        res.append("<br>");
+        res.append("Role: ");
+        res.append(getRole());
+        res.append("<br>");
+        res.append("Subjects: ");
+        res.append(getSubjects().size());
+        res.append("<br>");
+        return res.toString();
     }
 
     public List<Subject> getSubjects() {
