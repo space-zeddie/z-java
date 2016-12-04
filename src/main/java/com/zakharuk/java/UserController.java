@@ -29,9 +29,9 @@ public class UserController {
             userId = String.valueOf(user.getId());
         }
         catch (Exception ex) {
-            return "Error creating the user: " + ex.toString();
+            return SubjectController.HEADER + "Error creating the user: " + ex.toString() + SubjectController.FOOTER;
         }
-        return "User succesfully created with id = " + userId;
+        return SubjectController.HEADER + "User succesfully created with id = " + userId + SubjectController.FOOTER;
     }
 
     @RequestMapping("/deleteuser")
@@ -43,9 +43,9 @@ public class UserController {
             userDao.delete(user);
         }
         catch (Exception ex) {
-            return "Error deleting the user:" + ex.toString();
+            return SubjectController.HEADER + "Error deleting the user:" + ex.toString() + SubjectController.FOOTER;
         }
-        return "User succesfully deleted!";
+        return SubjectController.HEADER + "User succesfully deleted!" + SubjectController.FOOTER;
     }
 
     @RequestMapping("/get-user-by-name")
@@ -57,9 +57,9 @@ public class UserController {
             userId = String.valueOf(user.getId());
         }
         catch (Exception ex) {
-            return "User not found";
+            return SubjectController.HEADER + "User not found" + SubjectController.FOOTER;
         }
-        return "The subject id is: " + userId;
+        return SubjectController.HEADER + "The subject id is: " + userId + SubjectController.FOOTER;
     }
 
     @RequestMapping("/updateuser")
@@ -73,23 +73,25 @@ public class UserController {
             userDao.save(user);
         }
         catch (Exception ex) {
-            return "Error updating the user: " + ex.toString();
+            return SubjectController.HEADER + "Error updating the user: " + ex.toString() + SubjectController.FOOTER;
         }
-        return "User succesfully updated!";
+        return SubjectController.HEADER + "User succesfully updated!" + SubjectController.FOOTER;
     }
 
     @RequestMapping("/all-users")
     @ResponseBody
     public String findAll() {
         try {
-            Iterable<Subject> all = subjectDao.findAll();
+            Iterable<User> users = userDao.findAll();
             StringBuilder res = new StringBuilder();
-            for (Subject s : all)
-                res.append(s + "\n");
+            res.append(SubjectController.HEADER);
+            for (User s : users)
+                res.append(s + "<br>");
+            res.append(SubjectController.FOOTER);
             return res.toString();
         }
         catch (Exception ex) {
-            return "Error retrieving the subjects: " + ex.toString();
+            return SubjectController.HEADER + "Error retrieving the subjects: " + ex.toString() + SubjectController.FOOTER;
         }
     }
 
@@ -105,9 +107,9 @@ public class UserController {
             userDao.save(user);
         }
         catch (Exception ex) {
-            return "Error adding the subject: " + ex.toString();
+            return SubjectController.HEADER + "Error adding the subject: " + ex.toString() + SubjectController.FOOTER;
         }
-        return "Subject succesfully added!";
+        return SubjectController.HEADER + "Subject succesfully added!" + SubjectController.FOOTER;
     }
 
     @RequestMapping("/remove-subject")
@@ -122,8 +124,8 @@ public class UserController {
             userDao.save(user);
         }
         catch (Exception ex) {
-            return "Error removing the subject: " + ex.toString();
+            return SubjectController.HEADER + "Error removing the subject: " + ex.toString() + SubjectController.FOOTER;
         }
-        return "Subject succesfully removed!";
+        return SubjectController.HEADER + "Subject succesfully removed!" + SubjectController.FOOTER;
     }
 }

@@ -139,13 +139,11 @@ public class SubjectController {
 
     @RequestMapping("/add-user")
     @ResponseBody
-    public String addSubject(long subjectid, String userName) {
+    public String addUser(long id, String name) {
         try {
-            Subject subject = subjectDao.findOne(subjectid);
-            User user = userDao.findByName(userName);
-            List<User> newlist = subject.getStudents();
-            newlist.add(user);
-            subject.setStudents(newlist);
+            Subject subject = subjectDao.findOne(id);
+            User user = userDao.findByName(name);
+            subject.getStudents().add(user);
             subjectDao.save(subject);
         }
         catch (Exception ex) {
@@ -176,7 +174,7 @@ public class SubjectController {
         return "<a href=\"/list-students?id=" + id + "\" class=\"btn btn-info\">View Students</a>";
     }
 
-    private static String HEADER = "<!DOCTYPE html>\n" +
+    protected static String HEADER = "<!DOCTYPE html>\n" +
             "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
             "<head lang=\"en\">\n" +
             "\n" +
@@ -193,7 +191,7 @@ public class SubjectController {
             "<body>\n" +
             "<div class=\"container\">";
 
-    private static String FOOTER = "<br><a href=\"/\" class=\"btn btn-info\"><< Back</a>" + "\n" +
+    protected static String FOOTER = "<br><a href=\"/\" class=\"btn btn-info\"><< Back</a>" + "\n" +
             "</div>\n" +
             "</body>\n" +
             "</html>";
