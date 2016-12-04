@@ -1,5 +1,6 @@
 package com.zakharuk.java;
 
+import com.sun.deploy.panel.ITreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -200,7 +201,8 @@ public class SubjectController {
         StringBuilder res = new StringBuilder();
         res.append(HEADER);
         Subject subject = subjectDao.findOne(subjectid);
-        for (User u : subject.getStudents())
+        Iterable<User> users = userDao.findAll();
+        for (User u : users)
             res.append(addStudentBtn(subjectid, u.getId()));
         res.append(FOOTER);
         return res.toString();
