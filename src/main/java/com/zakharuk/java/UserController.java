@@ -97,13 +97,13 @@ public class UserController {
 
     @RequestMapping("/add-subject")
     @ResponseBody
+    @Transactional
     public String addSubject(long userid, String subjectName) {
         try {
             User user = userDao.findOne(userid);
             Subject subject = subjectDao.findByName(subjectName);
-            List<Subject> newlist = user.getSubjects();
-            newlist.add(subject);
-            user.setSubjects(newlist);
+            user.getSubjects().add(subject);
+            System.out.println();
             userDao.save(user);
         }
         catch (Exception ex) {
@@ -118,9 +118,7 @@ public class UserController {
         try {
             User user = userDao.findOne(userid);
             Subject subject = subjectDao.findByName(subjectName);
-            List<Subject> newlist = user.getSubjects();
-            newlist.remove(subject);
-            user.setSubjects(newlist);
+            user.getSubjects().remove(subject);
             userDao.save(user);
         }
         catch (Exception ex) {

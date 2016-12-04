@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.transaction.Synchronization;
+import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -17,6 +20,10 @@ public class SubjectController {
     private SubjectDao subjectDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * GET /create  --> Create a new subject and save it in the database.
@@ -139,12 +146,20 @@ public class SubjectController {
 
     @RequestMapping("/add-user")
     @ResponseBody
-    public String addUser(long id, String name) {
+    @Transactional
+    public String addUser(Long id, Long userId) {
         try {
             Subject subject = subjectDao.findOne(id);
-            User user = userDao.findByName(name);
+            User user = userDao.findOne(userId);
             subject.getStudents().add(user);
-            subjectDao.save(subject);
+            user.getSubjects().add(subject);
+            subjectRepository.save(new HashSet<Subject>(){{
+                add(subject);
+            }});
+            userRepository.save(new HashSet<User>(){{
+                add(user);
+            }});
+            //subjectDao.save(subject);
         }
         catch (Exception ex) {
             return HEADER + "Error adding the user: " + ex.toString() + FOOTER;
@@ -158,9 +173,7 @@ public class SubjectController {
         try {
             Subject subject = subjectDao.findOne(subjectid);
             User user = userDao.findByName(userName);
-            List<User> newlist = subject.getStudents();
-            newlist.remove(user);
-            subject.setStudents(newlist);
+            subject.getStudents().remove(user);
             subjectDao.save(subject);
         }
         catch (Exception ex) {
@@ -191,7 +204,7 @@ public class SubjectController {
             "<body>\n" +
             "<div class=\"container\">";
 
-    protected static String FOOTER = "<br><a href=\"/\" class=\"btn btn-info\"><< Back</a>" + "\n" +
+    protected static String FOOTER = "<br><a href=\"/\" class=\"btn btn-info\"><< Back to Homepage</a>" + "\n" +
             "</div>\n" +
             "</body>\n" +
             "</html>";

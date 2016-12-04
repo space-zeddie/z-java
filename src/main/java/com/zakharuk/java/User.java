@@ -28,7 +28,7 @@ public class User {
     private String role;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "subjects_id")
+    @JoinTable(name = "user_subjects", joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"))
     private List<Subject> subjects;
 
     public User() {
