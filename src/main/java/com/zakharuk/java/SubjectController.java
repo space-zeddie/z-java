@@ -109,6 +109,7 @@ public class SubjectController {
                 res.append(s.toString());
                 res.append("<br>");
                 res.append(listStudentsBtn(s.getId()));
+                res.append(selectStudentBtn(s.getId()));
                 res.append("</div>");
                 res.append("<br>");
             }
@@ -147,19 +148,20 @@ public class SubjectController {
     @RequestMapping("/add-user")
     @ResponseBody
     @Transactional
-    public String addUser(Long id, Long userId) {
+    public String addUser(Long subjectid, Long userid) {
         try {
-            Subject subject = subjectDao.findOne(id);
-            User user = userDao.findOne(userId);
-            subject.getStudents().add(user);
-            user.getSubjects().add(subject);
-            subjectRepository.save(new HashSet<Subject>(){{
-                add(subject);
-            }});
-            userRepository.save(new HashSet<User>(){{
-                add(user);
-            }});
-            //subjectDao.save(subject);
+            Subject subject = subjectDao.findOne(subjectid);
+            User user = userDao.findOne(userid);
+            if (!subject.getStudents().contains(user)) {
+                subject.getStudents().add(user);
+                user.getSubjects().add(subject);
+                subjectRepository.save(new HashSet<Subject>(){{
+                    add(subject);
+                }});
+                userRepository.save(new HashSet<User>(){{
+                    add(user);
+                }});
+            }
         }
         catch (Exception ex) {
             return HEADER + "Error adding the user: " + ex.toString() + FOOTER;
@@ -169,12 +171,20 @@ public class SubjectController {
 
     @RequestMapping("/remove-user")
     @ResponseBody
-    public String removeSubject(long subjectid, String userName) {
+    public String removeUser(Long subjectid, Long userid) {
         try {
             Subject subject = subjectDao.findOne(subjectid);
-            User user = userDao.findByName(userName);
-            subject.getStudents().remove(user);
-            subjectDao.save(subject);
+            User user = userDao.findOne(userid);
+            if (subject.getStudents().contains(user)) {
+                user.getSubjects().remove(subject);
+                subject.getStudents().remove(user);
+                subjectRepository.save(new HashSet<Subject>(){{
+                    add(subject);
+                }});
+                userRepository.save(new HashSet<User>(){{
+                    add(user);
+                }});
+            }
         }
         catch (Exception ex) {
             return "Error removing the user: " + ex.toString();
@@ -182,9 +192,33 @@ public class SubjectController {
         return "User succesfully removed!";
     }
 
+    @RequestMapping("/select-add-student")
+    @ResponseBody
+    public String selectStudent(Long subjectid) {
+        StringBuilder res = new StringBuilder();
+        res.append(HEADER);
+        Subject subject = subjectDao.findOne(subjectid);
+        for (User u : subject.getStudents())
+            res.append(addStudentBtn(subjectid, u.getId()));
+        res.append(FOOTER);
+        return res.toString();
+    }
+
+    private String selectStudentBtn(long id) {
+        return "<a href=\"/select-add-student?subjectid=" + id + "\" class=\"btn btn-info\">Add Student</a>";
+    }
+
     private String listStudentsBtn(long id) {
 
         return "<a href=\"/list-students?id=" + id + "\" class=\"btn btn-info\">View Students</a>";
+    }
+
+
+
+    private String addStudentBtn(long id, long studentId) {
+
+        return "<a href=\"/add-user?subjectid=" + id + "&userid=" + studentId + "\" class=\"btn btn-info\">Add "
+                + userDao.findOne(studentId).getName() + "</a>";
     }
 
     protected static String HEADER = "<!DOCTYPE html>\n" +

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -18,6 +19,10 @@ public class UserController {
     private UserDao userDao;
     @Autowired
     private SubjectDao subjectDao;
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping("/createuser")
     @ResponseBody
@@ -98,13 +103,20 @@ public class UserController {
     @RequestMapping("/add-subject")
     @ResponseBody
     @Transactional
-    public String addSubject(long userid, String subjectName) {
+    public String addSubject(Long userid, Long subjectid) {
         try {
             User user = userDao.findOne(userid);
-            Subject subject = subjectDao.findByName(subjectName);
-            user.getSubjects().add(subject);
-            System.out.println();
-            userDao.save(user);
+            Subject subject = subjectDao.findOne(subjectid);
+            if (!user.getSubjects().contains(subject)) {
+                user.getSubjects().add(subject);
+                subject.getStudents().add(user);
+                subjectRepository.save(new HashSet<Subject>(){{
+                    add(subject);
+                }});
+                userRepository.save(new HashSet<User>(){{
+                    add(user);
+                }});
+            }
         }
         catch (Exception ex) {
             return SubjectController.HEADER + "Error adding the subject: " + ex.toString() + SubjectController.FOOTER;
@@ -114,12 +126,20 @@ public class UserController {
 
     @RequestMapping("/remove-subject")
     @ResponseBody
-    public String removeSubject(long userid, String subjectName) {
+    public String removeSubject(Long userid, Long subjectid) {
         try {
             User user = userDao.findOne(userid);
-            Subject subject = subjectDao.findByName(subjectName);
-            user.getSubjects().remove(subject);
-            userDao.save(user);
+            Subject subject = subjectDao.findOne(subjectid);
+            if (user.getSubjects().contains(subject)) {
+                user.getSubjects().remove(subject);
+                subject.getStudents().remove(user);
+                subjectRepository.save(new HashSet<Subject>(){{
+                    add(subject);
+                }});
+                userRepository.save(new HashSet<User>(){{
+                    add(user);
+                }});
+            }
         }
         catch (Exception ex) {
             return SubjectController.HEADER + "Error removing the subject: " + ex.toString() + SubjectController.FOOTER;
