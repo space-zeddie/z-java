@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * Created by citizenzer0 on 12/4/16.
@@ -15,6 +16,8 @@ public class UserController {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private SubjectDao subjectDao;
 
     @RequestMapping("/createuser")
     @ResponseBody
@@ -61,7 +64,7 @@ public class UserController {
 
     @RequestMapping("/updateuser")
     @ResponseBody
-    public String updateSubject(long id, String name, String password, String role) {
+    public String updateUser(long id, String name, String password, String role) {
         try {
             User user = userDao.findOne(id);
             user.setName(name);
@@ -73,5 +76,37 @@ public class UserController {
             return "Error updating the user: " + ex.toString();
         }
         return "User succesfully updated!";
+    }
+
+    @RequestMapping("/all-users")
+    @ResponseBody
+    public String findAll() {
+        try {
+            Iterable<Subject> all = subjectDao.findAll();
+            StringBuilder res = new StringBuilder();
+            for (Subject s : all)
+                res.append(s + "\n");
+            return res.toString();
+        }
+        catch (Exception ex) {
+            return "Error retrieving the subjects: " + ex.toString();
+        }
+    }
+
+    @RequestMapping("/add-subject")
+    @ResponseBody
+    public String addSubject(long userid, String subjectName) {
+        try {
+            User user = userDao.findOne(userid);
+            Subject subject = subjectDao.findByName(subjectName);
+            List<Subject> newlist = user.getSubjects();
+            newlist.add(subject);
+            user.setSubjects(newlist);
+            userDao.save(user);
+        }
+        catch (Exception ex) {
+            return "Error adding the subject: " + ex.toString();
+        }
+        return "Subject succesfully added!";
     }
 }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 /**
  * Created by citizenzer0 on 12/2/16.
  */
@@ -13,6 +15,8 @@ public class SubjectController {
 
     @Autowired
     private SubjectDao subjectDao;
+    @Autowired
+    private UserDao userDao;
 
     /**
      * GET /create  --> Create a new subject and save it in the database.
@@ -84,6 +88,38 @@ public class SubjectController {
             return "Error updating the subject: " + ex.toString();
         }
         return "Subject succesfully updated!";
+    }
+
+    @RequestMapping("/all")
+    @ResponseBody
+    public String findAll() {
+        try {
+            Iterable<Subject> all = subjectDao.findAll();
+            StringBuilder res = new StringBuilder();
+            for (Subject s : all)
+                res.append(s + "\n");
+            return res.toString();
+        }
+        catch (Exception ex) {
+            return "Error retrieving the subjects: " + ex.toString();
+        }
+    }
+
+    @RequestMapping("/add-user")
+    @ResponseBody
+    public String addSubject(long subjectid, String userName) {
+        try {
+            Subject subject = subjectDao.findOne(subjectid);
+            User user = userDao.findByName(userName);
+            List<User> newlist = subject.getStudents();
+            newlist.add(user);
+            subject.setStudents(newlist);
+            subjectDao.save(subject);
+        }
+        catch (Exception ex) {
+            return "Error adding the user: " + ex.toString();
+        }
+        return "User succesfully added!";
     }
 
 }

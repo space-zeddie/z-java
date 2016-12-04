@@ -27,7 +27,7 @@ public class User {
     @NotNull
     private String role;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "subjects_id")
     private List<Subject> subjects;
 

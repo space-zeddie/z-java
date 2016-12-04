@@ -39,6 +39,14 @@ public class Subject {
     @ManyToMany(mappedBy = "subjects")
     public List<User> students;
 
+    public List<User> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<User> students) {
+        this.students = students;
+    }
+
     public Subject () {}
 
     public Subject(String name, double credits) {
