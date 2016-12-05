@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-    <title>Add Student</title>
+    <title>Add Subject</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="css/bootstrap.min.css"
           th:href="@{css/bootstrap.min.css}"
@@ -21,10 +21,11 @@
     <div class="jumbotron">
         <div>
             Name <input type="text" id="name" name="name" th:text="${name}" /><br />
-            Password <input type="text" id="password" name="password" th:text="${password}" /><br />
-            Role <input type="text" id="role" name="role" th:text="${role}"/><br />
-            <button id="adds">Process</button>
-            <a id="link" href="/" class = "btn btn-info regist">Register</a>
+            Credits <input type="text" id="credits" name="credits" th:text="${credits}" /><br />
+            Prof <input type="text" id="prof" name="prof" th:text="${prof}"/><br />
+            Annotation <input type="text" id="annotation" name="annotation" th:text="${annotation}"/><br />
+            <button id="adds1">Process</button>
+            <a id="link1" href="/" class = "btn btn-info regist">Add</a>
             <!--<input type="submit" />-->
         </div>
     </div>

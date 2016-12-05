@@ -29,12 +29,26 @@ public class SubjectController {
     /**
      * GET /create  --> Create a new subject and save it in the database.
      */
-    @RequestMapping("/create")
+    @RequestMapping("/create-full")
     @ResponseBody
     public String create(String name, double credits) {
         String subjectId = "";
         try {
             Subject subject = new Subject(name, credits);
+            subjectDao.save(subject);
+            subjectId = String.valueOf(subject.getId());
+        }
+        catch (Exception ex) {
+            return HEADER +  "Error creating the subject: " + ex.toString() + FOOTER;
+        }
+        return HEADER + "Subject succesfully created with id = " + subjectId + FOOTER;
+    }
+    @RequestMapping("/create")
+    @ResponseBody
+    public String createFull(String name, double credits, String prof, String annot) {
+        String subjectId = "";
+        try {
+            Subject subject = new Subject(name, credits, prof, annot);
             subjectDao.save(subject);
             subjectId = String.valueOf(subject.getId());
         }
