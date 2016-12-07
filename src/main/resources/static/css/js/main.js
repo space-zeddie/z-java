@@ -3,6 +3,19 @@
  */
 $(document).ready(function(){
     //$('.regist').visibility(false);
+    $('.lnk_edit').click(function (e) {
+        e.preventDefault();
+        var name = $("#name").val();
+        var credits = $("#credits").val();
+        var prof = $("#prof").val();
+        var annotation = $("#annotation").val();
+        var id = $('.lnk_edit').attr('id');
+        if (prof == 'null' || annotation == 'null' || !prof | !annotation)
+            window.location.replace("/update?id=" + id + "&name=" + name + "&credits=" + credits);
+        else window.location.replace("/update-full?id=" + id + "&name=" + name +
+                "&credits=" + credits + "&prof=" + prof + "&annot=" + annotation);
+
+    })
     $("#adds").click(function(e){
         e.preventDefault();
         var name = $("#name").val();

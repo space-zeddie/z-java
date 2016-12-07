@@ -111,6 +111,23 @@ public class SubjectController {
         return HEADER + "Subject succesfully updated!" + FOOTER;
     }
 
+    @RequestMapping("/update-full")
+    @ResponseBody
+    public String updateSubjectFull(long id, String name, double credits, String prof, String annotation) {
+        try {
+            Subject subject = subjectDao.findOne(id);
+            subject.setName(name);
+            subject.setCredits(credits);
+            subject.setProf(prof);
+            subject.setAnnotation(annotation);
+            subjectDao.save(subject);
+        }
+        catch (Exception ex) {
+            return HEADER + "Error updating the subject: " + ex.toString() + FOOTER;
+        }
+        return HEADER + "Subject succesfully updated!" + FOOTER;
+    }
+
     /**
      * GET /update  --> Update the name and the credits for the subject in the
      * database having the passed id.
@@ -200,11 +217,34 @@ public class SubjectController {
             if (SecurityConfiguration.isMethodist() || SecurityConfiguration.isAdmin())
                 res.append(updateProfBtn(s.getId()));
             if (SecurityConfiguration.isAdmin())
+                res.append(editSubjectBtn(s.getId()));
+            if (SecurityConfiguration.isAdmin())
                 res.append(deleteSubjectBtn(s.getId()));
             res.append("</div>");
             res.append("<br>");
         }
         return res;
+    }
+
+    @RequestMapping("/edit-subject")
+    @ResponseBody
+    public String editSubject(long id) {
+        StringBuilder res = new StringBuilder();
+        res.append(HEADER);
+        Subject s = subjectDao.findOne(id);
+        res.append("<div class=\"jumbotron\">");
+        res.append("<div>");
+        res.append("Name <input type=\"text\" id=\"name\" name=\"name\" th:text=\"${name}\" value=\""
+                + s.getName() +"\" /><br />");
+        res.append("Credits <input type=\"text\" id=\"credits\" name=\"credits\" th:text=\"${credits}\" value=\""
+                + s.getCredits() +"\" /><br />");
+        res.append("Professor <input type=\"text\" id=\"prof\" name=\"prof\" th:text=\"${prof}\" value=\""
+                + s.getProf() +"\" /><br />");
+        res.append("Annotation <input type=\"text\" id=\"annotation\" name=\"annotation\" th:text=\"${annotation}\" value=\""
+                + s.getAnnotation() +"\" /><br />");
+        res.append("<a id=\"" + s.getId() + "\" href=\"/\" class = \"btn btn-info lnk_edit\">Update</a>");
+        res.append(FOOTER);
+        return res.toString();
     }
 
     @RequestMapping("/list-students")
@@ -307,6 +347,11 @@ public class SubjectController {
 
         return "<a href=\"/delete?id=" + id + "\" class=\"btn btn-info\">Delete Subject</a>";
     }
+    private String editSubjectBtn(long id) {
+
+        return "<a href=\"/edit-subject?id=" + id + "\" class=\"btn btn-info\">Edit Subject</a>";
+    }
+
 
     private String recommendBtn(long id) {
 
