@@ -133,10 +133,10 @@ public class SubjectController {
 
     @RequestMapping("/recommend")
     @ResponseBody
-    public String recommend(long id) {
+    public String recommend(long id, boolean rec) {
         try {
             Subject subject = subjectDao.findOne(id);
-            subject.setRecommended(true);
+            subject.setRecommended(rec);
             subjectDao.save(subject);
         }
         catch (Exception ex) {
@@ -192,6 +192,10 @@ public class SubjectController {
             res.append("<br>");
             res.append(listStudentsBtn(s.getId()));
             res.append(selectStudentBtn(s.getId()));
+            if (!s.isRecommended())
+                res.append(recommendBtn(s.getId()));
+            else
+                res.append(unrecommendBtn(s.getId()));
             res.append("</div>");
             res.append("<br>");
         }
@@ -289,6 +293,16 @@ public class SubjectController {
     private String listStudentsBtn(long id) {
 
         return "<a href=\"/list-students?id=" + id + "\" class=\"btn btn-info\">View Students</a>";
+    }
+
+    private String recommendBtn(long id) {
+
+        return "<a href=\"/recommend?id=" + id + "&rec=true" + "\" class=\"btn btn-info\">Recommend</a>";
+    }
+
+    private String unrecommendBtn(long id) {
+
+        return "<a href=\"/recommend?id=" + id + "&rec=false" + "\" class=\"btn btn-info\">Unrecommend</a>";
     }
 
 
