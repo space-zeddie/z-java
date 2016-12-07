@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.transaction.Synchronization;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -112,6 +113,40 @@ public class SubjectController {
         return HEADER + "Subject succesfully updated!" + FOOTER;
     }
 
+    /**
+     * GET /update  --> Update the name and the credits for the subject in the
+     * database having the passed id.
+     */
+    @RequestMapping("/set-prof")
+    @ResponseBody
+    public String setProf(long id, String prof) {
+        try {
+            Subject subject = subjectDao.findOne(id);
+            subject.setProf(prof);
+            subjectDao.save(subject);
+        }
+        catch (Exception ex) {
+            return HEADER + "Error updating the subject: " + ex.toString() + FOOTER;
+        }
+        return HEADER + "Subject succesfully updated!" + FOOTER;
+    }
+
+    @RequestMapping("/recommend")
+    @ResponseBody
+    public String recommend(long id) {
+        try {
+            Subject subject = subjectDao.findOne(id);
+            subject.setRecommended(true);
+            subjectDao.save(subject);
+        }
+        catch (Exception ex) {
+            return HEADER + "Error updating the subject: " + ex.toString() + FOOTER;
+        }
+        return HEADER + "Subject succesfully updated!" + FOOTER;
+    }
+
+
+
     @RequestMapping("/all")
     @ResponseBody
     public String findAll() {
@@ -119,15 +154,7 @@ public class SubjectController {
         res.append(HEADER);
         try {
             Iterable<Subject> all = subjectDao.findAll();
-            for (Subject s : all) {
-                res.append("<div>");
-                res.append(s.toString());
-                res.append("<br>");
-                res.append(listStudentsBtn(s.getId()));
-                res.append(selectStudentBtn(s.getId()));
-                res.append("</div>");
-                res.append("<br>");
-            }
+            res = listSubjects(all, res);
         }
         catch (Exception ex) {
             res.append("Error retrieving the subjects: " + ex.toString());
@@ -136,6 +163,39 @@ public class SubjectController {
             res.append(FOOTER);
             return res.toString();
         }
+    }
+
+    @RequestMapping("/all-recommended")
+    @ResponseBody
+    public String findAllRecommended() {
+        StringBuilder res = new StringBuilder();
+        res.append(HEADER);
+        try {
+            List<Subject> all = new ArrayList<Subject>();
+            for (Subject s : subjectDao.findAll())
+                if (s.isRecommended()) all.add(s);
+            res = listSubjects(all, res);
+        }
+        catch (Exception ex) {
+            res.append("Error retrieving the subjects: " + ex.toString());
+        }
+        finally {
+            res.append(FOOTER);
+            return res.toString();
+        }
+    }
+
+    private StringBuilder listSubjects(Iterable<Subject> is, StringBuilder res) {
+        for (Subject s : is) {
+            res.append("<div>");
+            res.append(s.toString());
+            res.append("<br>");
+            res.append(listStudentsBtn(s.getId()));
+            res.append(selectStudentBtn(s.getId()));
+            res.append("</div>");
+            res.append("<br>");
+        }
+        return res;
     }
 
     @RequestMapping("/list-students")

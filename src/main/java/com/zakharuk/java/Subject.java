@@ -30,6 +30,9 @@ public class Subject {
     @NotNull
     private double credits;
 
+    @NotNull
+    private boolean isRecommended;
+
     @XmlAttribute
     private String prof;
 
@@ -52,13 +55,23 @@ public class Subject {
     public Subject(String name, double credits) {
         this.name = name;
         this.credits = credits;
+        isRecommended = false;
     }
 
     public Subject(String name, double credits, String prof, String annotation) {
         this.name = name;
         this.credits = credits;
+        isRecommended = false;
         this.prof = prof;
         this.annotation = annotation;
+    }
+
+    public boolean isRecommended() {
+        return isRecommended;
+    }
+
+    public void setRecommended(boolean recommended) {
+        isRecommended = recommended;
     }
 
     @Override
