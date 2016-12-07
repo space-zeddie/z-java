@@ -199,6 +199,8 @@ public class SubjectController {
             }
             if (SecurityConfiguration.isMethodist() || SecurityConfiguration.isAdmin())
                 res.append(updateProfBtn(s.getId()));
+            if (SecurityConfiguration.isAdmin())
+                res.append(deleteSubjectBtn(s.getId()));
             res.append("</div>");
             res.append("<br>");
         }
@@ -300,6 +302,10 @@ public class SubjectController {
     private String listStudentsBtn(long id) {
 
         return "<a href=\"/list-students?id=" + id + "\" class=\"btn btn-info\">View Students</a>";
+    }
+    private String deleteSubjectBtn(long id) {
+
+        return "<a href=\"/delete?id=" + id + "\" class=\"btn btn-info\">Delete Subject</a>";
     }
 
     private String recommendBtn(long id) {
