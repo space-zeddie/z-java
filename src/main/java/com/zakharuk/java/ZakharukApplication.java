@@ -22,4 +22,14 @@ public class ZakharukApplication {
 	public static int getProductionStage() {
 		return PRODUCTION_STAGE;
 	}
+
+	public static boolean isFirstStage () {
+		return PRODUCTION_STAGE == 1;
+	}
+	public static boolean isSecondStage () {
+		return PRODUCTION_STAGE == 2;
+	}
+	public static boolean isThirdStage () {
+		return PRODUCTION_STAGE == 3;
+	}
 }

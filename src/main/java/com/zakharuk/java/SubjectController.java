@@ -206,15 +206,15 @@ public class SubjectController {
             res.append(s.toString());
             res.append("<br>");
             res.append(listStudentsBtn(s.getId()));
-            if (SecurityConfiguration.isStudent() && s.isRecommended())
+            if (SecurityConfiguration.isStudent() && s.isRecommended() && ZakharukApplication.isSecondStage())
                 res.append(signUpBtn(s.getId()));
-            if (SecurityConfiguration.isMethodist()) {
+            if (SecurityConfiguration.isMethodist() && ZakharukApplication.isFirstStage()) {
                 if (!s.isRecommended())
                     res.append(recommendBtn(s.getId()));
                 else
                     res.append(unrecommendBtn(s.getId()));
             }
-            if (SecurityConfiguration.isMethodist() || SecurityConfiguration.isAdmin())
+            if (SecurityConfiguration.isMethodist() && ZakharukApplication.isFirstStage() || SecurityConfiguration.isAdmin())
                 res.append(updateProfBtn(s.getId()));
             if (SecurityConfiguration.isAdmin())
                 res.append(editSubjectBtn(s.getId()));
