@@ -22,8 +22,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/", "/all", "/all-recommended", "/all-users", "/createuser",
-                        "/list-students", "/updateuser", "/new-user").permitAll()
+                .antMatchers("/", "/css", "/css/js", "/css/fonts",
+                        "/all", "/all-recommended", "/all-users", "/createuser",
+                        "/list-students", "/updateuser", "/new-user", "/my-console").permitAll()
                 .antMatchers("/recommend", "/set-prof").hasRole("methodist")
                 .antMatchers("/update", "create", "/delete", "/create-full",
                         "/set-prof", "/deleteuser", "/updateuser", "/new-subject").hasRole("admin")
@@ -52,12 +53,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     public static boolean isStudent() {
+        System.err.println(SecurityConfiguration.findAuth().getAuthorities().toArray()[0]);
         return (SecurityConfiguration.findAuth().getAuthorities().toArray()[0]).toString().equals("ROLE_student");
     }
     public static boolean isMethodist() {
+        System.err.println(SecurityConfiguration.findAuth().getAuthorities().toArray()[0]);
         return (SecurityConfiguration.findAuth().getAuthorities().toArray()[0]).toString().equals("ROLE_methodist");
     }
     public static boolean isAdmin() {
+        System.err.println(SecurityConfiguration.findAuth().getAuthorities().toArray()[0]);
         return (SecurityConfiguration.findAuth().getAuthorities().toArray()[0]).toString().equals("ROLE_admin");
     }
 

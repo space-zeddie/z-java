@@ -151,4 +151,36 @@ public class UserController {
         }
         return SubjectController.HEADER + "Subject succesfully removed!" + SubjectController.FOOTER;
     }
+
+    @RequestMapping("/my-console")
+    @ResponseBody
+    public String myConsole() {
+        try {
+            StringBuilder res = new StringBuilder();
+            String myName = SecurityConfiguration.findAuth().getName();
+            User u = userDao.findByName(myName);
+            res.append("<div class=\"jumbotron\">");
+            if (SecurityConfiguration.isStudent()) {
+                res.append("<div>Hello " + myName + "!</div>");
+                res.append("<div>You currently have " + u.getAllCredits() + " credits.</div>");
+                res.append("<div>You're signed up for ");
+                for (Subject s : u.getSubjects())
+                    res.append(s.getName() + " ");
+                res.append("</div");
+            }
+            if (SecurityConfiguration.isMethodist()) {
+                res.append("<div>Hello " + myName + "!</div>");
+               // res.append("<a href=\"/new-subject\" class=\"btn btn-info\">Add a subject</a>");
+            }
+            if (SecurityConfiguration.isAdmin()) {
+                res.append("<div>Hello " + myName + "!</div>");
+                res.append("<a href=\"/new-subject\" class=\"btn btn-info\">Add a subject</a>");
+            }
+            res.append("</div>");
+            return res.toString();
+        }
+        catch (Exception ex) {
+            return SubjectController.HEADER + "Error finding a user in the database: " + ex.toString() + SubjectController.FOOTER;
+        }
+    }
 }

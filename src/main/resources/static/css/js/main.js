@@ -8,8 +8,8 @@ $(document).ready(function(){
         var name = $("#name").val();
         var pass = $("#password").val();
         var role = $("#role").val();
-        window.location.replace("/createuser?name=" + name + "&password=" + pass + "&role=" + role);
-        //$("#link").attr("href", "/createuser?name=" + name + "&password=" + pass + "&role=" + role);
+       // window.location.replace("/createuser?name=" + name + "&password=" + pass + "&role=" + role);
+        $("#link").attr("href", "/createuser?name=" + name + "&password=" + pass + "&role=" + role);
         //$('.regist').visibility(true);
     });
     $("#adds1").click(function(e){
@@ -18,8 +18,8 @@ $(document).ready(function(){
         var credits = $("#credits").val();
         var prof = $("#prof").val();
         var annotation = $("#annotation").val();
-        window.location.replace("/create-full?name=" + name + "&credits=" + credits + "&prof=" + prof + "&annot=" + annotation);
-        //$("#link1").attr("href", "/create-full?name=" + name + "&credits=" + credits + "&prof=" + prof + "&annot=" + annotation);
+        //window.location.replace("/create-full?name=" + name + "&credits=" + credits + "&prof=" + prof + "&annot=" + annotation);
+        $("#link1").attr("href", "/create-full?name=" + name + "&credits=" + credits + "&prof=" + prof + "&annot=" + annotation);
         //$('.regist').visibility(true);
     });
     $(".updateProf").click(function (e) {
