@@ -25,6 +25,9 @@
         <a href="/new-user" class="btn btn-info">Register</a>
 
         <a href="/all-recommended" class="btn btn-primary">List all recommended subjects</a>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
     </div>
 </div>
 </body>
