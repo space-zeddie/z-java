@@ -196,6 +196,7 @@ public class SubjectController {
                 res.append(recommendBtn(s.getId()));
             else
                 res.append(unrecommendBtn(s.getId()));
+            res.append(updateProfBtn(s.getId()));
             res.append("</div>");
             res.append("<br>");
         }
@@ -305,12 +306,22 @@ public class SubjectController {
         return "<a href=\"/recommend?id=" + id + "&rec=false" + "\" class=\"btn btn-info\">Unrecommend</a>";
     }
 
+    private String updateProfBtn(long id) {
+
+        return "<a href=\"/?id=" + id  + "\" class=\"btn btn-info updateProf\" id=\""+ id +"\">Change Professor</a>";
+    }
+
+
 
 
     private String addStudentBtn(long id, long studentId) {
 
         return "<a href=\"/add-user?subjectid=" + id + "&userid=" + studentId + "\" class=\"btn btn-info\">Add "
                 + userDao.findOne(studentId).getName() + "</a>";
+    }
+    private String setProfBtn(long id, long prof) {
+
+        return "<a href=\"/set-profr?id=" + id + "&prof=" + prof + "\" class=\"btn btn-info\">Change Professor</a>";
     }
     private String removeStudentBtn(long id, long studentId) {
 
@@ -327,8 +338,12 @@ public class SubjectController {
             "    <link href=\"css/bootstrap.min.css\"\n" +
             "          th:href=\"@{css/bootstrap.min.css}\"\n" +
             "          rel=\"stylesheet\" media=\"screen\" />\n" +
+            "    <script src=\"css/js/jq.js\"\n" +
+            "            th:src=\"@{css/js/jq.js}\"></script>\n" +
             "    <script src=\"css/js/bootstrap.js\"\n" +
             "            th:src=\"@{css/js/bootstrap.js}\"></script>\n" +
+            "    <script src=\"css/js/main.js\"\n" +
+            "            th:src=\"@{css/js/main.js}\"></script>\n" +
             "    <link href=\"../static/css/main.css\"\n" +
             "          th:href=\"@{css/main.css}\" rel=\"stylesheet\" media=\"screen\"/>\n" +
             "</head>\n" +
