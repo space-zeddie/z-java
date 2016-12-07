@@ -157,6 +157,7 @@ public class UserController {
     public String myConsole() {
         try {
             StringBuilder res = new StringBuilder();
+            res.append(SubjectController.HEADER);
             String myName = SecurityConfiguration.findAuth().getName();
             User u = userDao.findByName(myName);
             res.append("<div class=\"jumbotron\">");
@@ -175,8 +176,15 @@ public class UserController {
             if (SecurityConfiguration.isAdmin()) {
                 res.append("<div>Hello " + myName + "!</div>");
                 res.append("<a href=\"/new-subject\" class=\"btn btn-info\">Add a subject</a>");
+                if (ZakharukApplication.getProductionStage() != 1)
+                    res.append("<a href=\"/switch-production?id=1\" class=\"btn btn-info\">Switch to 1st production stage</a>");
+                if (ZakharukApplication.getProductionStage() != 2)
+                    res.append("<a href=\"/switch-production?id=2\" class=\"btn btn-info\">Switch to 2nd production stage</a>");
+                if (ZakharukApplication.getProductionStage() != 3)
+                    res.append("<a href=\"/switch-production?id=3\" class=\"btn btn-info\">Switch to 3rd production stage</a>");
             }
             res.append("</div>");
+            res.append(SubjectController.FOOTER);
             return res.toString();
         }
         catch (Exception ex) {

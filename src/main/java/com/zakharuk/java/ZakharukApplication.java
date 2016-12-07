@@ -18,4 +18,8 @@ public class ZakharukApplication {
 			PRODUCTION_STAGE = s;
 		else return;
 	}
+
+	public static int getProductionStage() {
+		return PRODUCTION_STAGE;
+	}
 }

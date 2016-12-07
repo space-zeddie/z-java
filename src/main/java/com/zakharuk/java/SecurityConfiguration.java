@@ -28,7 +28,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .hasAnyRole("guest", "methodist", "student", "admin")
                 .antMatchers("/recommend", "/set-prof").hasRole("methodist")
                 .antMatchers("/update", "create", "/delete", "/create-full",
-                        "/set-prof", "/deleteuser", "/updateuser", "/new-subject", "/edit-subject").hasRole("admin")
+                        "/set-prof", "/deleteuser", "/updateuser", "/new-subject",
+                        "/edit-subject", "/switch-production").hasRole("admin")
                 .antMatchers("/select-add-student", "/add-subject", "/remove-subject").hasRole("student")
                 .anyRequest().authenticated()
                 .and()

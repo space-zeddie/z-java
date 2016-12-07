@@ -2,6 +2,7 @@ package com.zakharuk.java;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by citizenzer0 on 11/28/16.
@@ -20,5 +21,11 @@ public class IndexController {
     @RequestMapping("/logout")
     String logoutPage() {
         return "logout";
+    }
+
+    @RequestMapping("/switch-production")
+    public String switchProductionStage(int id) {
+        ZakharukApplication.moveProductionStage(id);
+        return "index";
     }
 }
