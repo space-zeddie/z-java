@@ -24,7 +24,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 .antMatchers("/", "/css", "/css/js", "/css/fonts",
                         "/all", "/all-recommended", "/all-users", "/createuser",
-                        "/list-students", "/updateuser", "/new-user", "/my-console").permitAll()
+                        "/list-students", "/updateuser", "/new-user", "/my-console")
+                .hasAnyRole("guest", "methodist", "student", "admin")
                 .antMatchers("/recommend", "/set-prof").hasRole("methodist")
                 .antMatchers("/update", "create", "/delete", "/create-full",
                         "/set-prof", "/deleteuser", "/updateuser", "/new-subject").hasRole("admin")
@@ -46,6 +47,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .inMemoryAuthentication()
                     .withUser(u.getName()).password(u.getPassword()).roles(u.getRole());
         }
+        auth
+                .inMemoryAuthentication()
+                .withUser("guest").password("").roles("guest");
     }
 
     public static Authentication findAuth() {
