@@ -14,6 +14,8 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
+    static double CREDIT_LIMIT = 30;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -40,6 +42,14 @@ public class User {
         this.password = password;
         this.role = role;
         subjects = new ArrayList<Subject>();
+    }
+
+    public double getAllCredits() {
+        double total = 0;
+        for (Subject s : subjects) {
+            total += s.getCredits();
+        }
+        return total;
     }
 
     @Override

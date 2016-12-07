@@ -109,15 +109,19 @@ public class UserController {
             User user = userDao.findOne(userid);
             Subject subject = subjectDao.findOne(subjectid);
             if (!user.getSubjects().contains(subject)) {
-                user.getSubjects().add(subject);
-                subject.getStudents().add(user);
-                subjectRepository.save(new HashSet<Subject>(){{
-                    add(subject);
-                }});
-                userRepository.save(new HashSet<User>(){{
-                    add(user);
-                }});
+                if (user.getAllCredits() + subject.getCredits() <= User.CREDIT_LIMIT) {
+                    user.getSubjects().add(subject);
+                    subject.getStudents().add(user);
+                    subjectRepository.save(new HashSet<Subject>(){{
+                        add(subject);
+                    }});
+                    userRepository.save(new HashSet<User>(){{
+                        add(user);
+                    }});
+                }
+                else return SubjectController.HEADER + "No more available credits!" + SubjectController.FOOTER;
             }
+            else return SubjectController.HEADER + "You've already signed up for this subject." + SubjectController.FOOTER;
         }
         catch (Exception ex) {
             return SubjectController.HEADER + "Error adding the subject: " + ex.toString() + SubjectController.FOOTER;

@@ -6,6 +6,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Created by citizenzer0 on 11/28/16.
@@ -20,7 +22,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/", "/all", "/all-recommended", "/all-users").permitAll()
+                .antMatchers("/", "/all", "/all-recommended", "/all-users", "/createuser",
+                        "/list-students", "/updateuser", "/new-user").permitAll()
+                .antMatchers("/recommend", "/set-prof").hasRole("methodist")
+                .antMatchers("/update", "create", "/delete", "/create-full",
+                        "/set-prof", "/deleteuser", "/updateuser", "/new-subject").hasRole("admin")
+                .antMatchers("/select-add-student", "/add-subject", "/remove-subject").hasRole("student")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -38,6 +45,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .inMemoryAuthentication()
                     .withUser(u.getName()).password(u.getPassword()).roles(u.getRole());
         }
+    }
+
+    public static Authentication findAuth() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 
 }

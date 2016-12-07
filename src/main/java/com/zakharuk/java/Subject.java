@@ -101,6 +101,29 @@ public class Subject {
         return res.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Subject subject = (Subject) o;
+
+        if (id != subject.id) return false;
+        if (Double.compare(subject.credits, credits) != 0) return false;
+        return name.equals(subject.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = (int) (id ^ (id >>> 32));
+        result = 31 * result + name.hashCode();
+        temp = Double.doubleToLongBits(credits);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
     public long getId() {
         return id;
     }

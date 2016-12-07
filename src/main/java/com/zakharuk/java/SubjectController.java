@@ -2,6 +2,8 @@ package com.zakharuk.java;
 
 import com.sun.deploy.panel.ITreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -213,7 +215,8 @@ public class SubjectController {
             for (User u : s.getStudents()) {
                 res.append(u.toString());
                 res.append("<br>");
-                res.append(removeStudentBtn(s.getId(), u.getId()));
+                //if (((String)(SecurityConfiguration.findAuth().getAuthorities().toArray()[0])).equals("student"))
+                    res.append(removeStudentBtn(s.getId(), u.getId()));
                 res.append("<br>");
             }
         }
@@ -280,15 +283,17 @@ public class SubjectController {
         StringBuilder res = new StringBuilder();
         res.append(HEADER);
         Subject subject = subjectDao.findOne(subjectid);
-        Iterable<User> users = userDao.findAll();
-        for (User u : users)
-            res.append(addStudentBtn(subjectid, u.getId()));
+        //Iterable<User> users = userDao.findAll();
+        //for (User u : users)
+        User u = userDao.findByName(SecurityConfiguration.findAuth().getName());
+        res.append("<p>You currently have " + u.getAllCredits() + " credits. Are you sure you want to sign up?</p>");
+        res.append(addStudentBtn(subjectid, u.getId()));
         res.append(FOOTER);
         return res.toString();
     }
 
     private String selectStudentBtn(long id) {
-        return "<a href=\"/select-add-student?subjectid=" + id + "\" class=\"btn btn-info\">Add Student</a>";
+        return "<a href=\"/select-add-student?subjectid=" + id + "\" class=\"btn btn-info\">Sign Up</a>";
     }
 
     private String listStudentsBtn(long id) {
@@ -316,8 +321,7 @@ public class SubjectController {
 
     private String addStudentBtn(long id, long studentId) {
 
-        return "<a href=\"/add-user?subjectid=" + id + "&userid=" + studentId + "\" class=\"btn btn-info\">Add "
-                + userDao.findOne(studentId).getName() + "</a>";
+        return "<a href=\"/add-user?subjectid=" + id + "&userid=" + studentId + "\" class=\"btn btn-info\">Sign Up </a>";
     }
     private String setProfBtn(long id, long prof) {
 
