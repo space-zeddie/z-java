@@ -215,7 +215,8 @@ public class SubjectController {
             for (User u : s.getStudents()) {
                 res.append(u.toString());
                 res.append("<br>");
-                //if (((String)(SecurityConfiguration.findAuth().getAuthorities().toArray()[0])).equals("student"))
+                if (SecurityConfiguration.isStudent() &&
+                        (u.getId() == userDao.findByName(SecurityConfiguration.findAuth().getName()).getId()))
                     res.append(removeStudentBtn(s.getId(), u.getId()));
                 res.append("<br>");
             }
@@ -329,8 +330,7 @@ public class SubjectController {
     }
     private String removeStudentBtn(long id, long studentId) {
 
-        return "<a href=\"/remove-user?subjectid=" + id + "&userid=" + studentId + "\" class=\"btn btn-info\">Remove "
-                + userDao.findOne(studentId).getName() + "</a>";
+        return "<a href=\"/remove-user?subjectid=" + id + "&userid=" + studentId + "\" class=\"btn btn-info\">Sign Off </a>";
     }
 
     protected static String HEADER = "<!DOCTYPE html>\n" +

@@ -51,4 +51,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
+    public static boolean isStudent() {
+        return (SecurityConfiguration.findAuth().getAuthorities().toArray()[0]).toString().equals("ROLE_student");
+    }
+    public static boolean isMethodist() {
+        return (SecurityConfiguration.findAuth().getAuthorities().toArray()[0]).toString().equals("ROLE_methodist");
+    }
+    public static boolean isAdmin() {
+        return (SecurityConfiguration.findAuth().getAuthorities().toArray()[0]).toString().equals("ROLE_admin");
+    }
+
 }
