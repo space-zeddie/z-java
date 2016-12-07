@@ -1,14 +1,10 @@
 package com.zakharuk.java;
 
-import com.sun.deploy.panel.ITreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.transaction.Synchronization;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -193,12 +189,16 @@ public class SubjectController {
             res.append(s.toString());
             res.append("<br>");
             res.append(listStudentsBtn(s.getId()));
-            res.append(selectStudentBtn(s.getId()));
-            if (!s.isRecommended())
-                res.append(recommendBtn(s.getId()));
-            else
-                res.append(unrecommendBtn(s.getId()));
-            res.append(updateProfBtn(s.getId()));
+            if (SecurityConfiguration.isStudent() && s.isRecommended())
+                res.append(signUpBtn(s.getId()));
+            if (SecurityConfiguration.isMethodist()) {
+                if (!s.isRecommended())
+                    res.append(recommendBtn(s.getId()));
+                else
+                    res.append(unrecommendBtn(s.getId()));
+            }
+            if (SecurityConfiguration.isMethodist() || SecurityConfiguration.isAdmin())
+                res.append(updateProfBtn(s.getId()));
             res.append("</div>");
             res.append("<br>");
         }
@@ -293,7 +293,7 @@ public class SubjectController {
         return res.toString();
     }
 
-    private String selectStudentBtn(long id) {
+    private String signUpBtn(long id) {
         return "<a href=\"/select-add-student?subjectid=" + id + "\" class=\"btn btn-info\">Sign Up</a>";
     }
 
